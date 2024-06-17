@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/ui/onboarding/onboarding_page_position.dart';
 
 class OnBoardingViewPage extends StatelessWidget {
-  const OnBoardingViewPage({super.key});
+  final OnBoardingPagePosition onBoardingPagePosition;
+  final VoidCallback nextOnPressed;
+  final VoidCallback backOnPressed;
+  const OnBoardingViewPage(
+      {super.key,
+      required this.onBoardingPagePosition,
+      required this.nextOnPressed,
+      required this.backOnPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +18,7 @@ class OnBoardingViewPage extends StatelessWidget {
         children: [
           _buildHeaderImage(),
           Container(
-            margin: EdgeInsets.only(top: 10, left: 20),
+            margin: EdgeInsets.only(top: 10, left: 20, right: 20),
             child: Column(
               children: [
                 _buildBodyText(),
@@ -28,7 +36,7 @@ class OnBoardingViewPage extends StatelessWidget {
 
   Widget _buildHeaderImage() {
     return Image.asset(
-      'assets/images/Images_onboarding_1.png',
+      onBoardingPagePosition.OnBoardingPageImages(),
       height: 490,
       width: 428,
       fit: BoxFit.fill,
@@ -45,9 +53,9 @@ class OnBoardingViewPage extends StatelessWidget {
   }
 
   Widget _buildTextTitle() {
-    return const Text(
-      'Lorem Ipsum is simply dummy',
-      style: TextStyle(
+    return Text(
+      onBoardingPagePosition.OnBoardingPageTitle(),
+      style: const TextStyle(
           fontSize: 25,
           fontFamily: 'Lato',
           fontWeight: FontWeight.bold,
@@ -56,9 +64,9 @@ class OnBoardingViewPage extends StatelessWidget {
   }
 
   Widget _buildTextScript() {
-    return const Text(
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-      style: TextStyle(
+    return Text(
+      onBoardingPagePosition.OnBoardingPageContent(),
+      style: const TextStyle(
         fontSize: 15,
         fontFamily: 'Lato',
         color: Color(0xFF4E4B66),
@@ -70,6 +78,7 @@ class OnBoardingViewPage extends StatelessWidget {
     return Row(
       children: [
         _buildControl(),
+        const Spacer(),
         _buildButtonBackAndNext(),
       ],
     );
@@ -82,26 +91,60 @@ class OnBoardingViewPage extends StatelessWidget {
           width: 12,
           height: 12,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6), color: Color(0xFF1877F2)),
+              borderRadius: BorderRadius.circular(6),
+              color: onBoardingPagePosition == OnBoardingPagePosition.page1
+                  ? const Color(0xFF1877F2)
+                  : const Color(0xFFA0A3BD)),
         ),
         Container(
-          margin: EdgeInsets.symmetric(horizontal: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
           width: 12,
           height: 12,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6), color: Color(0xFFA0A3BD)),
+              borderRadius: BorderRadius.circular(6),
+              color: onBoardingPagePosition == OnBoardingPagePosition.page2
+                  ? const Color(0xFF1877F2)
+                  : const Color(0xFFA0A3BD)),
         ),
         Container(
           width: 12,
           height: 12,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(6), color: Color(0xFFA0A3BD)),
+              borderRadius: BorderRadius.circular(6),
+              color: onBoardingPagePosition == OnBoardingPagePosition.page3
+                  ? const Color(0xFF1877F2)
+                  : const Color(0xFFA0A3BD)),
         ),
       ],
     );
   }
 
   Widget _buildButtonBackAndNext() {
-    return Container();
+    return Row(
+      children: [
+        TextButton(
+          onPressed: backOnPressed,
+          child: Text(
+            onBoardingPagePosition == OnBoardingPagePosition.page1
+                ? ''
+                : 'Back',
+            style: const TextStyle(color: Color(0xFFB0B3B8)),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: nextOnPressed,
+          child: Text(
+            onBoardingPagePosition == OnBoardingPagePosition.page3
+                ? 'Get Started'
+                : 'Next',
+            style: const TextStyle(color: Colors.white, fontSize: 14),
+          ),
+          style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF1877F2),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4))),
+        )
+      ],
+    );
   }
 }
